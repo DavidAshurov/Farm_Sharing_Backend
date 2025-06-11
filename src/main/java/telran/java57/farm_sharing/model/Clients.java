@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @Entity
 @Builder
-public class Client {
+public class Clients {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment primary key
     private Long id;

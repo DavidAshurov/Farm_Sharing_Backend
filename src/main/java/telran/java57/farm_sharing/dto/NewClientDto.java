@@ -1,14 +1,9 @@
 package telran.java57.farm_sharing.dto;
 
-import lombok.*;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-public class ClientDto {
-    private Long id;
+public class NewClientDto {
     private String name;
     private String phoneNumber;
     private String city;
     private String email;
+
 }
