@@ -18,7 +18,7 @@ public class Client {
     @Setter
     @Column(nullable = false, unique = true)
     private String phoneNumber;
-    @Column(nullable = false) // Ensures the city is not null
+    @Column(nullable = false)
     @Setter
     private String city;
     @Setter
