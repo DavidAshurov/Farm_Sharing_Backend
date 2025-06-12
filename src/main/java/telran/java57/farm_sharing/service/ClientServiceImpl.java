@@ -6,8 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import telran.java57.farm_sharing.dao.ClientRepository;
 import telran.java57.farm_sharing.dto.ClientDto;
+import telran.java57.farm_sharing.dto.NewClientDto;
 import telran.java57.farm_sharing.dto.exceptions.EntityNotFoundException;
-import telran.java57.farm_sharing.model.Clients;
+import telran.java57.farm_sharing.model.Client;
 
 import java.util.List;
 
@@ -18,65 +19,65 @@ public class ClientServiceImpl implements ClientService {
     private final ModelMapper modelMapper;
 
     @Override
-    public boolean addClient(ClientDto clientDto) {
-        if ( clientRepository.existsById(clientDto.getId()) ) {
-            return false;
+    public boolean addClient(NewClientDto newClientDto) {
+        if ( clientRepository.existsClientByPhoneNumber(newClientDto.getPhoneNumber()) || clientRepository.existsClientByEmail(newClientDto.getEmail())) {
+            return false; // Client with this phone number already exists
         }
-        clientRepository.save(modelMapper.map(clientDto, Clients.class));
+        clientRepository.save(modelMapper.map(newClientDto, Client.class));
         return true;
     }
 
     @Override
     public ClientDto findClientById(Long id) {
-        Clients clients = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
-        return modelMapper.map(clients, ClientDto.class);
+        Client client = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
+        return modelMapper.map(client, ClientDto.class);
     }
 
     @Override
     @Transactional
     public ClientDto updateClientName(Long id, String name) {
-        Clients clients = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
-        clients.setName(name);
-        clientRepository.save(clients);
-        return modelMapper.map(clients, ClientDto.class);
+        Client client = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
+        client.setName(name);
+        clientRepository.save(client);
+        return modelMapper.map(client, ClientDto.class);
     }
 
     @Override
     @Transactional
     public ClientDto updateClientPhoneNumber(Long id, String phoneNumber) {
-        Clients clients = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
-        clients.setPhoneNumber(phoneNumber);
-        clientRepository.save(clients);
-        return modelMapper.map(clients, ClientDto.class);
+        Client client = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
+        client.setPhoneNumber(phoneNumber);
+        clientRepository.save(client);
+        return modelMapper.map(client, ClientDto.class);
 
     }
 
     @Override
     @Transactional
     public ClientDto updateClientCity(Long id, String city) {
-        Clients clients = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
-        clients.setCity(city);
-        clientRepository.save(clients);
-        return modelMapper.map(clients, ClientDto.class);
+        Client client = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
+        client.setCity(city);
+        clientRepository.save(client);
+        return modelMapper.map(client, ClientDto.class);
 
     }
 
     @Override
     @Transactional
     public ClientDto updateClientEmail(Long id, String email) {
-        Clients clients = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
-        clients.setEmail(email);
-        clientRepository.save(clients);
-        return modelMapper.map(clients, ClientDto.class);
+        Client client = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
+        client.setEmail(email);
+        clientRepository.save(client);
+        return modelMapper.map(client, ClientDto.class);
 
     }
 
     @Override
     @Transactional
     public ClientDto removeClient(Long id) {
-        Clients clients = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
-        clientRepository.deleteById(clients.getId());
-        return modelMapper.map(clients, ClientDto.class);
+        Client client = clientRepository.findById(id).orElseThrow(EntityNotFoundException :: new);
+        clientRepository.deleteById(client.getId());
+        return modelMapper.map(client, ClientDto.class);
     }
 
     @Override

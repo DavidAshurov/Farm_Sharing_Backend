@@ -1,0 +1,42 @@
+# Spring Boot Application Startup Error Fix
+
+## Issue
+The application was failing to start with the following error:
+```
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-12T16:39:15.303+03:00 ERROR 1616 --- [Farm_Sharing] [main] o.s.boot.SpringApplication : Application run failed
+```
+
+## Root Cause
+The error was caused by an incomplete database configuration in the `application.properties` file. The file was using an environment variable `${AIVEN_URL}` for the database connection URL, but:
+
+1. This environment variable might not have been set in the environment where the application was running
+2. There were no default values provided as fallbacks
+3. The database username and password properties were missing entirely
+
+## Solution
+The `application.properties` file was updated to:
+
+1. Provide default values for the database connection URL using the Spring property placeholder syntax: `${AIVEN_URL:default_value}`
+2. Add database username and password properties with default values
+3. Explicitly specify the driver class name
+
+Here's the updated configuration:
+```properties
+spring.datasource.url=${AIVEN_URL:jdbc:postgresql://localhost:5432/farm_sharing}
+spring.datasource.username=${AIVEN_USERNAME:postgres}
+spring.datasource.password=${AIVEN_PASSWORD:postgres}
+spring.datasource.driver-class-name=org.postgresql.Driver
+```
+
+This configuration allows the application to:
+- Use environment variables if they are set (AIVEN_URL, AIVEN_USERNAME, AIVEN_PASSWORD)
+- Fall back to default values (local PostgreSQL database) if the environment variables are not set
+
+## Verification
+The fix was verified by running the application tests, which confirmed that the application context can now be loaded successfully.
+
+## Best Practices
+1. Always provide default values for critical configuration properties
+2. Include all necessary database connection properties (URL, username, password, driver)
+3. Use environment variables for sensitive information, but ensure they have sensible defaults for development

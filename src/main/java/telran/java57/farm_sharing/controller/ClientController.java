@@ -2,12 +2,13 @@ package telran.java57.farm_sharing.controller;
 
 import org.springframework.web.bind.annotation.*;
 import telran.java57.farm_sharing.dto.ClientDto;
+import telran.java57.farm_sharing.dto.NewClientDto;
 import telran.java57.farm_sharing.service.ClientService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/clients")
 public class ClientController {
     private final ClientService clientService;
 
@@ -16,8 +17,8 @@ public class ClientController {
     }
 
     @PostMapping
-    public boolean addClient(@RequestBody ClientDto clientDto) {
-        return clientService.addClient(clientDto);
+    public boolean addClient(@RequestBody NewClientDto newClientDto) {
+        return clientService.addClient(newClientDto);
     }
 
     @GetMapping("/{id}")

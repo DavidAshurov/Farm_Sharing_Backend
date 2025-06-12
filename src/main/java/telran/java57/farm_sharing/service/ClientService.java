@@ -2,11 +2,12 @@ package telran.java57.farm_sharing.service;
 
 
 import telran.java57.farm_sharing.dto.ClientDto;
+import telran.java57.farm_sharing.dto.NewClientDto;
 
 import java.util.List;
 
 public interface ClientService {
-    boolean addClient(ClientDto clientDto);
+    boolean addClient(NewClientDto newClientDto);
     ClientDto findClientById(Long id);
     ClientDto updateClientName(Long id, String name);
     ClientDto updateClientPhoneNumber(Long id, String phoneNumber);
