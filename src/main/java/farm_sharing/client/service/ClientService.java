@@ -1,8 +1,8 @@
-package telran.java57.farm_sharing.service;
+package farm_sharing.client.service;
 
 
-import telran.java57.farm_sharing.dto.ClientDto;
-import telran.java57.farm_sharing.dto.NewClientDto;
+import farm_sharing.client.dto.ClientDto;
+import farm_sharing.client.dto.NewClientDto;
 
 import java.util.List;
 

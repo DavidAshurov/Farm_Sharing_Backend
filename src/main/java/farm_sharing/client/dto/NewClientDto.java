@@ -1,4 +1,4 @@
-package telran.java57.farm_sharing.dto;
+package farm_sharing.client.dto;
 
 import lombok.Getter;
 

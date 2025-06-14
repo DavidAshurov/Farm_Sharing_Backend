@@ -1,7 +1,7 @@
-package telran.java57.farm_sharing.dao;
+package farm_sharing.client.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import telran.java57.farm_sharing.model.Client;
+import farm_sharing.client.model.Client;
 
 import java.util.List;
 

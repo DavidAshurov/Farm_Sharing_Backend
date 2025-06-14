@@ -1,4 +1,4 @@
-package telran.java57.farm_sharing.dto.exceptions;
+package farm_sharing.client.dto.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

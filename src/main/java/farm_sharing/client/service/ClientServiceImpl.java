@@ -1,14 +1,14 @@
-package telran.java57.farm_sharing.service;
+package farm_sharing.client.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import telran.java57.farm_sharing.dao.ClientRepository;
-import telran.java57.farm_sharing.dto.ClientDto;
-import telran.java57.farm_sharing.dto.NewClientDto;
-import telran.java57.farm_sharing.dto.exceptions.EntityNotFoundException;
-import telran.java57.farm_sharing.model.Client;
+import farm_sharing.client.dao.ClientRepository;
+import farm_sharing.client.dto.ClientDto;
+import farm_sharing.client.dto.NewClientDto;
+import farm_sharing.client.dto.exceptions.EntityNotFoundException;
+import farm_sharing.client.model.Client;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
-package telran.java57.farm_sharing.controller;
+package farm_sharing.client.controller;
 
 import org.springframework.web.bind.annotation.*;
-import telran.java57.farm_sharing.dto.ClientDto;
-import telran.java57.farm_sharing.dto.NewClientDto;
-import telran.java57.farm_sharing.service.ClientService;
+import farm_sharing.client.dto.ClientDto;
+import farm_sharing.client.dto.NewClientDto;
+import farm_sharing.client.service.ClientService;
 
 import java.util.List;
 

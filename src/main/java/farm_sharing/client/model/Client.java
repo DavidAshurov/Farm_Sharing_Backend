@@ -1,4 +1,4 @@
-package telran.java57.farm_sharing.model;
+package farm_sharing.client.model;
 
 import jakarta.persistence.*;
 import lombok.*;
