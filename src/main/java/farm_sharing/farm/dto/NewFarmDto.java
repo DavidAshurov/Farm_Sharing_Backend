@@ -1,9 +1,9 @@
-package farm_sharing.farmer.dto;
+package farm_sharing.farm.dto;
 
 import lombok.Getter;
 
 @Getter
-public class NewFarmerDto {
+public class NewFarmDto {
     String companyName;
     String phoneNumber;
     String city;

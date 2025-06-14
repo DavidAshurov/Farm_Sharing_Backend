@@ -1,13 +1,16 @@
-package farm_sharing.farmer.dto;
+package farm_sharing.farm.dto;
 
+import farm_sharing.offer.dto.OfferDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FarmerDto {
+public class FarmDto {
     Long id;
     String companyName;
     String phoneNumber;
