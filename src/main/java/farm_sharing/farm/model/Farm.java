@@ -1,14 +1,17 @@
-package farm_sharing.farmer.model;
+package farm_sharing.farm.model;
 
+import farm_sharing.offer.model.Offer;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Farmer {
+public class Farm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -24,4 +27,6 @@ public class Farmer {
     @Setter
     @Column(unique = true)
     String email;
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.REMOVE)
+    List<Offer> offers;
 }
