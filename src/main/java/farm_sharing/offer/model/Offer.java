@@ -1,6 +1,6 @@
 package farm_sharing.offer.model;
 
-import farm_sharing.farm.model.Farm;
+import farm_sharing.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +25,5 @@ public class Offer {
     Integer price;
     @Setter
     @ManyToOne
-    Farm farm;
+    User farm;
 }

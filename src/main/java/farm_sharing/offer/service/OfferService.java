@@ -6,7 +6,7 @@ import farm_sharing.offer.dto.OfferDto;
 import java.util.List;
 
 public interface OfferService {
-    boolean createOffer(NewOfferDto dto, Long farmId);
+    boolean createOffer(NewOfferDto dto, String farmNickname);
 
     OfferDto findOfferById(Long id);
 
