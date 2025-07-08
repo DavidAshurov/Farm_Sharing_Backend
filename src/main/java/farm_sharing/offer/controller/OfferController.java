@@ -6,6 +6,7 @@ import farm_sharing.offer.service.OfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,9 +17,8 @@ public class OfferController {
     final OfferService offerService;
 
     @PostMapping
-    public boolean createOffer(@RequestBody NewOfferDto dto) {
-        //TODO get farmer id
-        return offerService.createOffer(dto, 1L);
+    public boolean createOffer(@RequestBody NewOfferDto dto, Principal principal) {
+        return offerService.createOffer(dto, principal.getName());
     }
 
     @GetMapping("/{id}")

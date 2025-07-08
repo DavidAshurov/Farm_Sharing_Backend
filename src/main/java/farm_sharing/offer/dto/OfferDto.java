@@ -1,6 +1,6 @@
 package farm_sharing.offer.dto;
 
-import farm_sharing.farm.dto.FarmDto;
+import farm_sharing.user.dto.UserDto;
 import lombok.Getter;
 
 @Getter
@@ -11,5 +11,5 @@ public class OfferDto {
     String description;
     Integer amount;
     Integer price;
-    FarmDto farm;
+    UserDto farm;
 }
