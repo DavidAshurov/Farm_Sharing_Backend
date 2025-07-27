@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Transactional
     @Override
     public UserDto createAdminAccount(NewAdminDto dto) {
-        User newAdmin = new User(null, dto.getNickname(), null,null,null,
+        User newAdmin = new User(null, dto.getNickname(), null,null,null,null,
                 dto.getEmail(), passwordEncoder.encode(dto.getPassword()), Role.ADMINISTRATOR);
         userRepository.save(newAdmin);
         return modelMapper.map(newAdmin, UserDto.class);
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         if (!userRepository.existsUserByEmail("admin")) {
-            User admin = new User(null, "admin", null, null, null,
+            User admin = new User(null, "admin", null, null, null, null,
                     "admin", passwordEncoder.encode("admin1234"), Role.ADMINISTRATOR);
             userRepository.save(admin);
         }
