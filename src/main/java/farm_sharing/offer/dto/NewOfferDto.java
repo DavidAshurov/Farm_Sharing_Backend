@@ -9,4 +9,5 @@ public class NewOfferDto {
     String description;
     Integer amount;
     Integer price;
+    String units;
 }

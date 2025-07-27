@@ -11,4 +11,5 @@ public class UserDto {
     String address;
     String email;
     String role;
+    Float rating;
 }

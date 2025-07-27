@@ -11,5 +11,6 @@ public class OfferDto {
     String description;
     Integer amount;
     Integer price;
+    String units;
     UserDto farm;
 }

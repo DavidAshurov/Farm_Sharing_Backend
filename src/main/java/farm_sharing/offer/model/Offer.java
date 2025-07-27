@@ -24,6 +24,8 @@ public class Offer {
     @Setter
     Integer price;
     @Setter
+    String units;
+    @Setter
     @ManyToOne
     User farm;
 }

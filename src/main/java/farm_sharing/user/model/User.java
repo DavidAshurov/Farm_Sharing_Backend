@@ -17,6 +17,8 @@ public class User {
     @Column(unique = true, nullable = false)
     String nickname;
     @Setter
+    Float rating;
+    @Setter
     @Column(unique = true)
     String phoneNumber;
     @Setter
