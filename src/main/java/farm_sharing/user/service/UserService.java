@@ -1,7 +1,5 @@
 package farm_sharing.user.service;
 
-import farm_sharing.security.dto.JwtAuthenticationDto;
-import farm_sharing.security.dto.RefreshTokenDto;
 import farm_sharing.security.dto.UserCredentialsDto;
 import farm_sharing.user.dto.*;
 import org.apache.coyote.BadRequestException;
@@ -12,9 +10,9 @@ import java.util.List;
 public interface UserService {
     boolean signUp(NewUserDto dto) throws BadRequestException;
 
-    JwtAuthenticationDto signIn(UserCredentialsDto dto) throws AuthenticationException;
+    UserDto signIn(UserCredentialsDto dto) throws AuthenticationException;
 
-    JwtAuthenticationDto refreshToken(RefreshTokenDto dto) throws Exception;
+    String refreshToken(String refreshToken) throws Exception;
 
     UserDto findById(Long id);
 
@@ -28,3 +26,4 @@ public interface UserService {
 
     boolean changePassword(String nickname, ChangePasswordDto dto) throws BadRequestException;
 }
+

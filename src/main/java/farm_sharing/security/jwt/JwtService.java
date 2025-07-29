@@ -25,11 +25,8 @@ public class JwtService {
         return jwtDto;
     }
 
-    public JwtAuthenticationDto refreshBaseToken(String email, String refreshToken) {
-        JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
-        jwtDto.setToken(generateJwtToken(email));
-        jwtDto.setRefreshToken(refreshToken);
-        return jwtDto;
+    public String refreshBaseToken(String email) {
+        return generateJwtToken(email);
     }
 
     public String getEmailFromToken(String token) {
@@ -73,7 +70,7 @@ public class JwtService {
     }
 
     private String generateRefreshToken(String email) {
-        Date date = Date.from(LocalDateTime.now().plusMinutes(60).atZone(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(LocalDateTime.now().plusDays(7).atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .subject(email)
                 .expiration(date)

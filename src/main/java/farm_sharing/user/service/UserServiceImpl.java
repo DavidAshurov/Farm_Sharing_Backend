@@ -1,8 +1,6 @@
 package farm_sharing.user.service;
 
 import farm_sharing.exceptions.EntityNotFoundException;
-import farm_sharing.security.dto.JwtAuthenticationDto;
-import farm_sharing.security.dto.RefreshTokenDto;
 import farm_sharing.security.dto.UserCredentialsDto;
 import farm_sharing.security.jwt.JwtService;
 import farm_sharing.user.dao.UserRepository;
@@ -55,18 +53,16 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
 
     @Transactional(readOnly = true)
     @Override
-    public JwtAuthenticationDto signIn(UserCredentialsDto dto) throws AuthenticationException {
-        User user = checkCredentials(dto);
-        return jwtService.generateAuthToken(user.getEmail());
+    public UserDto signIn(UserCredentialsDto dto) throws AuthenticationException {
+        return modelMapper.map(checkCredentials(dto),UserDto.class);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public JwtAuthenticationDto refreshToken(RefreshTokenDto dto) throws Exception {
-        String refreshToken = dto.getRefreshToken();
+    public String refreshToken(String refreshToken) throws Exception {
         if (refreshToken != null && jwtService.validateJwtToken(refreshToken)) {
             User user = findByEmail(jwtService.getEmailFromToken(refreshToken));
-            return jwtService.refreshBaseToken(user.getEmail(), refreshToken);
+            return jwtService.refreshBaseToken(user.getEmail());
         }
         throw new AuthenticationException("Invalid refresh token");
     }
