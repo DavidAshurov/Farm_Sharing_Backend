@@ -23,7 +23,12 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping
+    @GetMapping()
+    public UserDto getDataOfAuthorizedUser(Principal principal) {
+        return userService.getDataOfAuthorizedUser(principal.getName());
+    }
+
+    @GetMapping("/all")
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
