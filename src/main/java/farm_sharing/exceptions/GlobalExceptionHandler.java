@@ -13,9 +13,9 @@ import javax.naming.AuthenticationException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<String> handleAuthException(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication failed: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed: " + ex.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

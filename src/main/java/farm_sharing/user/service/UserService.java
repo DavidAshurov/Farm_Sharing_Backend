@@ -1,5 +1,6 @@
 package farm_sharing.user.service;
 
+import farm_sharing.security.dto.RefreshTokenDto;
 import farm_sharing.security.dto.UserCredentialsDto;
 import farm_sharing.user.dto.*;
 import org.apache.coyote.BadRequestException;
@@ -12,7 +13,7 @@ public interface UserService {
 
     UserDto signIn(UserCredentialsDto dto) throws AuthenticationException;
 
-    String refreshToken(String refreshToken) throws Exception;
+    RefreshTokenDto refreshToken(String refreshToken) throws Exception;
 
     UserDto findById(Long id);
 
@@ -25,5 +26,7 @@ public interface UserService {
     UserDto createAdminAccount(NewAdminDto dto);
 
     boolean changePassword(String nickname, ChangePasswordDto dto) throws BadRequestException;
+
+    UserDto getDataOfAuthorizedUser(String name);
 }
 

@@ -40,9 +40,9 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("refreshToken",jwt.getRefreshToken())
                 .httpOnly(true)
                 .secure(false)
-                .path("/auth/refresh")
+                .path("/api/auth/refresh")
                 .maxAge(Duration.ofDays(7))
-                .sameSite("None")
+                .sameSite("Lax")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE,cookie.toString());
         SignInDto res = new SignInDto(jwt.getToken(),user);
@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) throws Exception {
+    public ResponseEntity<RefreshTokenDto> refreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) throws Exception {
         return ResponseEntity.ok(userService.refreshToken(refreshToken));
     }
 }
