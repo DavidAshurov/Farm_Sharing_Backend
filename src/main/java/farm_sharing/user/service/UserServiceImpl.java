@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
         if (userRepository.existsUserByEmail(dto.getEmail())) {
             throw new BadRequestException("User with this email already exists");
         }
-        if (userRepository.existsUserByPhoneNumber(dto.getPhoneNumber())) {
+        if (dto.getPhoneNumber() != null && userRepository.existsUserByPhoneNumber(dto.getPhoneNumber())) {
             throw new BadRequestException("User with this phone number already exists");
         }
         if (userRepository.existsUserByNickname(dto.getNickname())) {
