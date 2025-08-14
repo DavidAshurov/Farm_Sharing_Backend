@@ -68,14 +68,12 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
         throw new AuthenticationException("Invalid refresh token");
     }
 
-    @Transactional(readOnly = true)
     @Override
     public UserDto findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with this ID doesn't exist in DB"));
         return modelMapper.map(user, UserDto.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()

@@ -8,6 +8,6 @@ public class NewOfferDto {
     String title;
     String description;
     Integer amount;
-    Integer price;
+    Double price;
     String units;
 }

@@ -22,7 +22,7 @@ public class Offer {
     @Setter
     Integer amount;
     @Setter
-    Integer price;
+    Double price;
     @Setter
     String units;
     @Setter

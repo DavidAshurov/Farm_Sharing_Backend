@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/offers").permitAll()
+                        .requestMatchers("/cart/**").hasRole(Role.CLIENT.name())
                         .requestMatchers(HttpMethod.PUT,"/user/{nickname}")
                             .access(new WebExpressionAuthorizationManager("authentication.name == #nickname"))
                         .requestMatchers(HttpMethod.DELETE,"/user/{nickname}")
