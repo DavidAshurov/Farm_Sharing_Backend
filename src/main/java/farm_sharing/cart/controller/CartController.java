@@ -38,7 +38,7 @@ public class CartController {
     }
 
     @DeleteMapping
-    public boolean removeCart(Principal principal) {
-        return cartService.removeCart(principal.getName());
+    public boolean clearCart(Principal principal) {
+        return cartService.clearCart(principal.getName());
     }
 }

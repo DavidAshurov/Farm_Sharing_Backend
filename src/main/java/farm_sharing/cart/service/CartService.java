@@ -16,5 +16,5 @@ public interface CartService {
 
     boolean changeItemQuantity(String nickname, Long itemId, UpdateItemQuantityDto dto) throws BadRequestException;
 
-    boolean removeCart(String nickname);
+    boolean clearCart(String nickname);
 }

@@ -6,5 +6,5 @@ import lombok.Getter;
 public class OfferInCartDto {
     String title;
     Double price;
-    String units;
+    Integer amount;
 }

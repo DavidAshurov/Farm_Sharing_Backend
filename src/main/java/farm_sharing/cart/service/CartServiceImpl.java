@@ -66,7 +66,7 @@ public class CartServiceImpl implements CartService {
         if (removed) {
             cartRepository.save(cart);
         } else {
-            throw new BadRequestException("Cart item with this ID is not in your cart");
+            throw new BadRequestException("Cart item with this ID is not in the cart of authorized user");
         }
         return removed;
     }
@@ -96,16 +96,17 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart);
             return true;
         } else {
-            throw new BadRequestException("Cart item with this ID is not in your cart");
+            throw new BadRequestException("Cart item with this ID is not in the cart of authorized user");
         }
     }
 
     @Transactional
     @Override
-    public boolean removeCart(String nickname) {
+    public boolean clearCart(String nickname) {
         Cart cart = cartRepository.findByClient_Nickname(nickname).
                 orElseThrow(() -> new EntityNotFoundException("Cart of authorized user doesn't exist"));
-        cartRepository.delete(cart);
+        cart.getItems().clear();
+        cartRepository.save(cart);
         return true;
     }
 }
