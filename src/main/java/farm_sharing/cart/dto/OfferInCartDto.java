@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class OfferInCartDto {
+    Long id;
     String title;
     Double price;
     Integer amount;

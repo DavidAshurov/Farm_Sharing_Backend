@@ -2,8 +2,12 @@ package farm_sharing.offer.controller;
 
 import farm_sharing.offer.dto.NewOfferDto;
 import farm_sharing.offer.dto.OfferDto;
+import farm_sharing.offer.dto.OffersRequestDto;
+import farm_sharing.offer.dto.OffersResponseDto;
+import farm_sharing.offer.model.Offer;
 import farm_sharing.offer.service.OfferService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,8 +31,8 @@ public class OfferController {
     }
 
     @GetMapping
-    public List<OfferDto> getAllOffers() {
-        return offerService.getAllOffers();
+    public OffersResponseDto getAllOffers(@ModelAttribute OffersRequestDto dto) {
+        return offerService.getAllOffers(dto);
     }
 
     @PutMapping("/{id}")
