@@ -41,8 +41,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/offers").permitAll()
                         .requestMatchers("/cart/**").hasRole(Role.CLIENT.name())
-                        .requestMatchers(HttpMethod.PUT,"/user/{nickname}")
-                            .access(new WebExpressionAuthorizationManager("authentication.name == #nickname"))
                         .requestMatchers(HttpMethod.DELETE,"/user/{nickname}")
                             .access(new WebExpressionAuthorizationManager("authentication.name == #nickname || hasRole('ADMINISTRATOR')"))
                         .requestMatchers("/user/new-admin")

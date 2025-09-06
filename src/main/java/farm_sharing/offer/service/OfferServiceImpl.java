@@ -48,7 +48,7 @@ public class OfferServiceImpl implements OfferService{
     public OffersResponseDto getAllOffers(OffersRequestDto dto) {
         Pageable pageable = PageRequest.of(dto.getPageNumber(),dto.getPageSize(),
                 Sort.by(Sort.Direction.fromString(dto.getSortDirection()), dto.getSortField()));
-        Specification<Offer> spec = OfferSpecification.offerSpecification(dto.getCategory());
+        Specification<Offer> spec = OfferSpecification.offerSpecification(dto.getCategory(),dto.getSearch());
 
         Page<Offer> page = offerRepository.findAll(spec,pageable);
 

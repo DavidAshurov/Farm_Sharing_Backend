@@ -11,6 +11,7 @@ public class OffersRequestDto {
     String sortField;
     String sortDirection;
     String category;
+    String search;
 
     public OffersRequestDto() {
         if (pageNumber == null) pageNumber = 0;
