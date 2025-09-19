@@ -33,9 +33,9 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/{nickname}")
-    public UserDto updateUser(@PathVariable String nickname, @RequestBody UpdateUserDto dto) {
-        return userService.updateUser(nickname,dto);
+    @PutMapping()
+    public UserDto updateUser(Principal principal, @RequestBody UpdateUserDto dto) {
+        return userService.updateUser(principal.getName(),dto);
     }
 
     @DeleteMapping("/{nickname}")
