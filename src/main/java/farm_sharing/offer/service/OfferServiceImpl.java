@@ -2,10 +2,7 @@ package farm_sharing.offer.service;
 
 import farm_sharing.exceptions.EntityNotFoundException;
 import farm_sharing.offer.dao.OfferRepository;
-import farm_sharing.offer.dto.NewOfferDto;
-import farm_sharing.offer.dto.OfferDto;
-import farm_sharing.offer.dto.OffersRequestDto;
-import farm_sharing.offer.dto.OffersResponseDto;
+import farm_sharing.offer.dto.*;
 import farm_sharing.offer.model.Offer;
 import farm_sharing.offer.specification.OfferSpecification;
 import farm_sharing.user.dao.UserRepository;
@@ -48,13 +45,19 @@ public class OfferServiceImpl implements OfferService{
     public OffersResponseDto getAllOffers(OffersRequestDto dto) {
         Pageable pageable = PageRequest.of(dto.getPageNumber(),dto.getPageSize(),
                 Sort.by(Sort.Direction.fromString(dto.getSortDirection()), dto.getSortField()));
-        Specification<Offer> spec = OfferSpecification.offerSpecification(dto.getCategory(),dto.getSearch());
+        Specification<Offer> spec = OfferSpecification.offerSpecification(
+                dto.getCategory(),
+                dto.getSearch(),
+                dto.getMinPrice(),
+                dto.getMaxPrice()
+        );
 
         Page<Offer> page = offerRepository.findAll(spec,pageable);
 
         return new OffersResponseDto(
                 page.getContent().stream().map(offer -> modelMapper.map(offer, OfferDto.class)).toList(),
                 page.getPageable().getPageNumber(),
+                page.getSize(),
                 page.getNumberOfElements(),
                 page.getTotalPages(),
                 page.getTotalElements()
@@ -75,5 +78,13 @@ public class OfferServiceImpl implements OfferService{
         Offer offer = offerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Offer with this ID doesn't exist in DB"));
         offerRepository.delete(offer);
         return true;
+    }
+
+    @Override
+    public MinMaxPriceDto getMinMaxPrice() {
+        return new MinMaxPriceDto(
+                offerRepository.findMinPrice(),
+                offerRepository.findMaxPrice()
+        );
     }
 }

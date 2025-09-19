@@ -9,6 +9,7 @@ import java.util.List;
 public class OffersResponseDto {
     List<OfferDto> offers;
     Integer pageNumber;
+    Integer pageSize;
     Integer numberOfElements;
     Integer totalPages;
     Long totalElements;

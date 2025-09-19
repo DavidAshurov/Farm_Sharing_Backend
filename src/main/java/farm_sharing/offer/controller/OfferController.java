@@ -1,9 +1,6 @@
 package farm_sharing.offer.controller;
 
-import farm_sharing.offer.dto.NewOfferDto;
-import farm_sharing.offer.dto.OfferDto;
-import farm_sharing.offer.dto.OffersRequestDto;
-import farm_sharing.offer.dto.OffersResponseDto;
+import farm_sharing.offer.dto.*;
 import farm_sharing.offer.model.Offer;
 import farm_sharing.offer.service.OfferService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,11 @@ public class OfferController {
     @GetMapping
     public OffersResponseDto getAllOffers(@ModelAttribute OffersRequestDto dto) {
         return offerService.getAllOffers(dto);
+    }
+
+    @GetMapping("/min-max-price")
+    public MinMaxPriceDto getMinMaxPrice() {
+        return offerService.getMinMaxPrice();
     }
 
     @PutMapping("/{id}")

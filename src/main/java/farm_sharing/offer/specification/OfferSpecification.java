@@ -11,12 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfferSpecification {
-    public static Specification<Offer> offerSpecification(String category, String search) {
+    public static Specification<Offer> offerSpecification(String category,
+                                                          String search,
+                                                          Double minPrice,
+                                                          Double maxPrice) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             if (category != null && !category.isEmpty()) {
                 predicates.add(cb.equal(root.get("category"), category));
+            }
+
+            if (minPrice != null && maxPrice != null && minPrice < maxPrice) {
+                predicates.add(cb.between(root.get("price"),minPrice,maxPrice));
             }
 
             if (search != null && !search.isEmpty()) {

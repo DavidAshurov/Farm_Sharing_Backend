@@ -10,6 +10,8 @@ public class OffersRequestDto {
     Integer pageSize;
     String sortField;
     String sortDirection;
+    Double minPrice;
+    Double maxPrice;
     String category;
     String search;
 

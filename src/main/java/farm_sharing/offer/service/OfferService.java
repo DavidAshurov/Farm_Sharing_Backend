@@ -1,9 +1,6 @@
 package farm_sharing.offer.service;
 
-import farm_sharing.offer.dto.NewOfferDto;
-import farm_sharing.offer.dto.OfferDto;
-import farm_sharing.offer.dto.OffersRequestDto;
-import farm_sharing.offer.dto.OffersResponseDto;
+import farm_sharing.offer.dto.*;
 import farm_sharing.offer.model.Offer;
 import org.springframework.data.domain.Page;
 
@@ -19,4 +16,6 @@ public interface OfferService {
     OfferDto updateOffer(Long id, NewOfferDto dto);
 
     boolean deleteOffer(Long id);
+
+    MinMaxPriceDto getMinMaxPrice();
 }
