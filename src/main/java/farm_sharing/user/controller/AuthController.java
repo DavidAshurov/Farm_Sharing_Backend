@@ -49,6 +49,19 @@ public class AuthController {
         return ResponseEntity.ok(res);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken","")
+                .httpOnly(true)
+                .secure(false)
+                .path("/api/auth/refresh")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE,cookie.toString());
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenDto> refreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) throws Exception {
         return ResponseEntity.ok(userService.refreshToken(refreshToken));
