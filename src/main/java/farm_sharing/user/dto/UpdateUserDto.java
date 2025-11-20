@@ -9,5 +9,4 @@ public class UpdateUserDto {
     String city;
     String address;
     String email;
-    Float rating;
 }

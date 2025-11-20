@@ -19,7 +19,7 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
 
-    UserDto updateUser(String nickname, UpdateUserDto dto);
+    UserDto updateUser(String nickname, UpdateUserDto dto) throws BadRequestException;
 
     boolean deleteUser(String nickname);
 

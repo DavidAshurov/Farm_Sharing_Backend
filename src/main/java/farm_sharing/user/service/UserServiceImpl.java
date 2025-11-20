@@ -83,8 +83,17 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
 
     @Transactional
     @Override
-    public UserDto updateUser(String nickname, UpdateUserDto dto) {
+    public UserDto updateUser(String nickname, UpdateUserDto dto) throws BadRequestException {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException("User with this nickname doesn't exist in DB"));
+        if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsUserByEmail(dto.getEmail())) {
+            throw new BadRequestException("User with this email already exists");
+        }
+        if (!user.getNickname().equals(dto.getNickname()) && userRepository.existsUserByNickname(dto.getNickname())) {
+            throw new BadRequestException("User with this nickname already exists");
+        }
+        if (!user.getPhoneNumber().equals(dto.getPhoneNumber()) && userRepository.existsUserByPhoneNumber(dto.getPhoneNumber())) {
+            throw new BadRequestException("User with this phone number already exists");
+        }
         modelMapper.map(dto, user);
         userRepository.save(user);
         return modelMapper.map(user, UserDto.class);

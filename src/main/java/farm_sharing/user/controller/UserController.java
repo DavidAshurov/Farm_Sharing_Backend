@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PutMapping()
-    public UserDto updateUser(Principal principal, @RequestBody UpdateUserDto dto) {
+    public UserDto updateUser(Principal principal, @RequestBody UpdateUserDto dto) throws BadRequestException {
         return userService.updateUser(principal.getName(),dto);
     }
 
