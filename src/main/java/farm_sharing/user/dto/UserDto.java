@@ -1,6 +1,7 @@
 package farm_sharing.user.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class UserDto {
@@ -12,4 +13,6 @@ public class UserDto {
     String email;
     String role;
     Float rating;
+    @Setter
+    String avatar;
 }
