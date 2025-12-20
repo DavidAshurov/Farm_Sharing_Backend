@@ -1,6 +1,7 @@
 package farm_sharing.user.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class UpdateUserDto {
@@ -9,4 +10,6 @@ public class UpdateUserDto {
     String city;
     String address;
     String email;
+    @Setter
+    String avatarTmpKey;
 }

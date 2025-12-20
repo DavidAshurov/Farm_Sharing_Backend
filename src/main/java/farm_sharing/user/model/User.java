@@ -33,4 +33,6 @@ public class User {
     String password;
     @Setter
     Role role;
+    @Setter
+    String avatar;
 }

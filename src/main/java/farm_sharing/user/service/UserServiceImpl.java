@@ -4,6 +4,7 @@ import farm_sharing.exceptions.EntityNotFoundException;
 import farm_sharing.security.dto.RefreshTokenDto;
 import farm_sharing.security.dto.UserCredentialsDto;
 import farm_sharing.security.jwt.JwtService;
+import farm_sharing.shared.images.service.ImageService;
 import farm_sharing.user.dao.UserRepository;
 import farm_sharing.user.dto.*;
 import farm_sharing.user.model.Role;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, CommandLineRunner {
-
+    final ImageService imageService;
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
     final ModelMapper modelMapper;
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Transactional(readOnly = true)
     @Override
     public UserDto signIn(UserCredentialsDto dto) throws AuthenticationException {
-        return modelMapper.map(checkCredentials(dto),UserDto.class);
+        return modelMapper.map(checkCredentials(dto), UserDto.class);
     }
 
     @Transactional(readOnly = true)
@@ -85,14 +86,20 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Override
     public UserDto updateUser(String nickname, UpdateUserDto dto) throws BadRequestException {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException("User with this nickname doesn't exist in DB"));
-        if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsUserByEmail(dto.getEmail())) {
+        if (dto.getEmail() != null && !user.getEmail().equals(dto.getEmail()) &&
+                userRepository.existsUserByEmail(dto.getEmail())) {
             throw new BadRequestException("User with this email already exists");
         }
-        if (!user.getNickname().equals(dto.getNickname()) && userRepository.existsUserByNickname(dto.getNickname())) {
+        if (dto.getNickname() != null && !user.getNickname().equals(dto.getNickname()) &&
+                userRepository.existsUserByNickname(dto.getNickname())) {
             throw new BadRequestException("User with this nickname already exists");
         }
-        if (!user.getPhoneNumber().equals(dto.getPhoneNumber()) && userRepository.existsUserByPhoneNumber(dto.getPhoneNumber())) {
+        if (dto.getPhoneNumber() != null && !user.getPhoneNumber().equals(dto.getPhoneNumber()) &&
+                userRepository.existsUserByPhoneNumber(dto.getPhoneNumber())) {
             throw new BadRequestException("User with this phone number already exists");
+        }
+        if (dto.getAvatarTmpKey() != null) {
+            updateAvatar(user, dto.getAvatarTmpKey());
         }
         modelMapper.map(dto, user);
         userRepository.save(user);
@@ -110,8 +117,8 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Transactional
     @Override
     public UserDto createAdminAccount(NewAdminDto dto) {
-        User newAdmin = new User(null, dto.getNickname(), null,null,null,null,
-                dto.getEmail(), passwordEncoder.encode(dto.getPassword()), Role.ADMINISTRATOR);
+        User newAdmin = new User(null, dto.getNickname(), null, null, null, null,
+                dto.getEmail(), passwordEncoder.encode(dto.getPassword()), Role.ADMINISTRATOR, null);
         userRepository.save(newAdmin);
         return modelMapper.map(newAdmin, UserDto.class);
     }
@@ -131,7 +138,7 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Override
     public UserDto getDataOfAuthorizedUser(String name) {
         User user = userRepository.findByNickname(name).orElseThrow(() -> new EntityNotFoundException("User with this ID doesn't exist in DB"));
-        return modelMapper.map(user,UserDto.class);
+        return modelMapper.map(user, UserDto.class);
     }
 
     private User checkCredentials(UserCredentialsDto dto) throws AuthenticationException {
@@ -149,12 +156,29 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
         return userRepository.findByEmail(email).orElseThrow(Exception::new);
     }
 
+    private void updateAvatar(User user, String tmpKey) {
+        if (tmpKey.isEmpty()) {
+            if (user.getAvatar() != null) {
+                imageService.deleteFile(user.getAvatar());
+                user.setAvatar(null);
+            }
+            return;
+        }
+        String newKey = tmpKey.substring(4);
+        imageService.moveS3Object(tmpKey, newKey);
+        String oldAvatar = user.getAvatar();
+        user.setAvatar(newKey);
+        if (oldAvatar != null) {
+            imageService.deleteFile(oldAvatar);
+        }
+    }
+
     @Override
     @Transactional
     public void run(String... args) throws Exception {
         if (!userRepository.existsUserByEmail("admin")) {
             User admin = new User(null, "admin", null, null, null, null,
-                    "admin", passwordEncoder.encode("admin1234"), Role.ADMINISTRATOR);
+                    "admin", passwordEncoder.encode("admin1234"), Role.ADMINISTRATOR, null);
             userRepository.save(admin);
         }
     }

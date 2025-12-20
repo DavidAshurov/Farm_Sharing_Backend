@@ -33,7 +33,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping()
+    @PatchMapping()
     public UserDto updateUser(Principal principal, @RequestBody UpdateUserDto dto) throws BadRequestException {
         return userService.updateUser(principal.getName(),dto);
     }
