@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
             throw new BadRequestException("User with this phone number already exists");
         }
         if (dto.getAvatarTmpKey() != null) {
-            updateAvatar(user, dto.getAvatarTmpKey());
+            imageService.updateImage(dto.getAvatarTmpKey(), user::setAvatar, user::getAvatar);
         }
         modelMapper.map(dto, user);
         userRepository.save(user);
@@ -110,6 +110,9 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
     @Override
     public boolean deleteUser(String nickname) {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException("User with this nickname doesn't exist in DB"));
+        if (user.getAvatar() != null) {
+            imageService.deleteFile(user.getAvatar());
+        }
         userRepository.delete(user);
         return true;
     }
@@ -154,23 +157,6 @@ public class UserServiceImpl implements UserService, CommandLineRunner {
 
     private User findByEmail(String email) throws Exception {
         return userRepository.findByEmail(email).orElseThrow(Exception::new);
-    }
-
-    private void updateAvatar(User user, String tmpKey) {
-        if (tmpKey.isEmpty()) {
-            if (user.getAvatar() != null) {
-                imageService.deleteFile(user.getAvatar());
-                user.setAvatar(null);
-            }
-            return;
-        }
-        String newKey = tmpKey.substring(4);
-        imageService.moveS3Object(tmpKey, newKey);
-        String oldAvatar = user.getAvatar();
-        user.setAvatar(newKey);
-        if (oldAvatar != null) {
-            imageService.deleteFile(oldAvatar);
-        }
     }
 
     @Override

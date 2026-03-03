@@ -18,4 +18,6 @@ public interface OfferService {
     boolean deleteOffer(Long id);
 
     MinMaxPriceDto getMinMaxPrice();
+
+    OffersResponseDto getMyOffers(String nickname, MyOffersRequestDto dto);
 }

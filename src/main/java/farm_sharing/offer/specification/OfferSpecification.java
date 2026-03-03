@@ -23,7 +23,7 @@ public class OfferSpecification {
             }
 
             if (minPrice != null && maxPrice != null && minPrice < maxPrice) {
-                predicates.add(cb.between(root.get("price"),minPrice,maxPrice));
+                predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
             }
 
             if (search != null && !search.isEmpty()) {

@@ -1,6 +1,8 @@
 package farm_sharing.offer.dao;
 
 import farm_sharing.offer.model.Offer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -10,4 +12,6 @@ public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecific
     Double findMaxPrice();
     @Query("SELECT MIN(o.price) FROM Offer o")
     Double findMinPrice();
+
+    Page<Offer> findAllByFarm_Nickname(String farm, Pageable pageable);
 }

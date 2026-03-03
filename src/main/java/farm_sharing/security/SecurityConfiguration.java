@@ -46,14 +46,16 @@ public class SecurityConfiguration {
                             .access(new WebExpressionAuthorizationManager("authentication.name == #nickname || hasRole('ADMINISTRATOR')"))
                         .requestMatchers("/user/new-admin")
                             .hasRole(Role.ADMINISTRATOR.name())
+                        .requestMatchers("/offers/my")
+                            .hasRole(Role.FARM.name())
                         .requestMatchers(HttpMethod.PUT,"/offers/{id}")
                             .access((auth,context) -> new AuthorizationDecision(webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")),auth.get().getName())))
                         .requestMatchers(HttpMethod.DELETE,"/offers/{id}")
-                        .access((auth,context) -> {
-                            boolean checkOfferOwner = webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")),auth.get().getName());
-                            boolean checkAdmin = context.getRequest().isUserInRole(Role.ADMINISTRATOR.name());
-                            return new AuthorizationDecision(checkOfferOwner || checkAdmin);
-                        })
+                            .access((auth,context) -> {
+                                boolean checkOfferOwner = webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")),auth.get().getName());
+                                boolean checkAdmin = context.getRequest().isUserInRole(Role.ADMINISTRATOR.name());
+                                return new AuthorizationDecision(checkOfferOwner || checkAdmin);
+                            })
                         .anyRequest().authenticated()
                 );
         return http.build();

@@ -17,7 +17,7 @@ public class OffersRequestDto {
 
     public OffersRequestDto() {
         if (pageNumber == null) pageNumber = 0;
-        if (pageSize == null) pageSize = 20;
+        if (pageSize == null) pageSize = 10;
         if (sortField == null) sortField = "title";
         if (sortDirection == null) sortDirection = "asc";
     }

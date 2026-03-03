@@ -2,6 +2,7 @@ package farm_sharing.offer.dto;
 
 import farm_sharing.user.dto.UserDto;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class OfferDto {
@@ -12,5 +13,7 @@ public class OfferDto {
     Integer amount;
     Double price;
     String units;
+    @Setter
+    String image;
     UserDto farm;
 }

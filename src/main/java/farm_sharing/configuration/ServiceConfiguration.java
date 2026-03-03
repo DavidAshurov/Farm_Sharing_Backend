@@ -1,5 +1,7 @@
 package farm_sharing.configuration;
 
+import farm_sharing.offer.dto.OfferDto;
+import farm_sharing.offer.model.Offer;
 import farm_sharing.shared.images.service.ImageService;
 import farm_sharing.user.dto.UserDto;
 import farm_sharing.user.model.User;
@@ -28,9 +30,21 @@ public class ServiceConfiguration {
                 .addMappings(mapper ->
                         mapper.using(ctx -> {
                                     String key = (String) ctx.getSource();
-                                    return key == null ? null : imageService.toPublicUrl(key);
+                                    return key == null || key.isEmpty()
+                                            ? null
+                                            : imageService.toPublicUrl(key);
                                 })
                                 .map(User::getAvatar, UserDto::setAvatar)
+                );
+        modelMapper.typeMap(Offer.class, OfferDto.class)
+                .addMappings(mapper ->
+                        mapper.using(ctx -> {
+                                    String key = (String) ctx.getSource();
+                                    return key == null || key.isEmpty()
+                                            ? null
+                                            : imageService.toPublicUrl(key);
+                                })
+                                .map(Offer::getImage, OfferDto::setImage)
                 );
         return modelMapper;
     }

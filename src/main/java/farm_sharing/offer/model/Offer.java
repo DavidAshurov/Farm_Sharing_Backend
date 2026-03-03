@@ -26,6 +26,8 @@ public class Offer {
     @Setter
     String units;
     @Setter
+    String image;
+    @Setter
     @ManyToOne
     User farm;
 }
