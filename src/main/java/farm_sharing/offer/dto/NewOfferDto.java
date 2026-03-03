@@ -10,4 +10,5 @@ public class NewOfferDto {
     Integer amount;
     Double price;
     String units;
+    String imageTmpKey;
 }

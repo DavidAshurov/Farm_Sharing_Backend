@@ -14,6 +14,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 
 import java.time.Duration;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,6 @@ public class ImageService {
     private String publicUrl;
 
     public S3UploadDto generatePresignedUploadUrl(String folderName, String fileName) {
-
         String key = "tmp/" + folderName + "/" + UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -41,7 +42,7 @@ public class ImageService {
         return new S3UploadDto(presignedRequest.url().toString(), key);
     }
 
-    public void moveS3Object(String sourceKey, String destKey) {
+    private void moveS3Object(String sourceKey, String destKey) {
         s3Client.copyObject(CopyObjectRequest.builder()
                 .sourceBucket(bucketName)
                 .sourceKey(sourceKey)
@@ -57,6 +58,31 @@ public class ImageService {
                 .bucket(bucketName)
                 .key(key)
                 .build());
+    }
+
+    public void updateImage(String tmpKey,
+                            Consumer<String> setter,
+                            Supplier<String> currentImageGetter) {
+        if (tmpKey.isEmpty()) {
+            String current = currentImageGetter.get();
+            if (current != null) {
+                deleteFile(current);
+                setter.accept(null);
+            }
+            return;
+        }
+        String newKey = moveFromTmpToPersistent(tmpKey);
+        String oldImage = currentImageGetter.get();
+        setter.accept(newKey);
+        if (oldImage != null) {
+            deleteFile(oldImage);
+        }
+    }
+
+    public String moveFromTmpToPersistent(String tmpUrl) {
+        String newUrl = tmpUrl.substring(4);
+        moveS3Object(tmpUrl, newUrl);
+        return newUrl;
     }
 
     public String toPublicUrl(String key) {

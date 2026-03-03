@@ -32,12 +32,17 @@ public class OfferController {
         return offerService.getAllOffers(dto);
     }
 
+    @GetMapping("/my")
+    public OffersResponseDto getMyOffers(Principal principal, @ModelAttribute MyOffersRequestDto dto) {
+        return offerService.getMyOffers(principal.getName(), dto);
+    }
+
     @GetMapping("/min-max-price")
     public MinMaxPriceDto getMinMaxPrice() {
         return offerService.getMinMaxPrice();
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public OfferDto updateOffer(@PathVariable Long id,@RequestBody NewOfferDto dto) {
         return offerService.updateOffer(id,dto);
     }

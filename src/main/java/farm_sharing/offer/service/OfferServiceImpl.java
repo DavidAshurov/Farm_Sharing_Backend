@@ -5,6 +5,7 @@ import farm_sharing.offer.dao.OfferRepository;
 import farm_sharing.offer.dto.*;
 import farm_sharing.offer.model.Offer;
 import farm_sharing.offer.specification.OfferSpecification;
+import farm_sharing.shared.images.service.ImageService;
 import farm_sharing.user.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class OfferServiceImpl implements OfferService{
-
+    final ImageService imageService;
     final UserRepository userRepository;
     final OfferRepository offerRepository;
     final ModelMapper modelMapper;
@@ -29,6 +30,11 @@ public class OfferServiceImpl implements OfferService{
     public boolean createOffer(NewOfferDto dto, String farmNickname) {
         Offer offer = modelMapper.map(dto, Offer.class);
         offer.setFarm(userRepository.findByNickname(farmNickname).get());
+        if (dto.getImageTmpKey() != null && !dto.getImageTmpKey().isEmpty()) {
+            offer.setImage(imageService.moveFromTmpToPersistent(dto.getImageTmpKey()));
+        } else {
+            offer.setImage(null);
+        }
         offerRepository.save(offer);
         return true;
     }
@@ -64,11 +70,29 @@ public class OfferServiceImpl implements OfferService{
         );
     }
 
+    @Override
+    public OffersResponseDto getMyOffers(String nickname, MyOffersRequestDto dto) {
+        Pageable pageable = PageRequest.of(dto.getPageNumber(),dto.getPageSize());
+        Page<Offer> page = offerRepository.findAllByFarm_Nickname(nickname, pageable);
+        return new OffersResponseDto(
+                page.getContent().stream().map(offer -> modelMapper.map(offer, OfferDto.class)).toList(),
+                page.getPageable().getPageNumber(),
+                page.getSize(),
+                page.getNumberOfElements(),
+                page.getTotalPages(),
+                page.getTotalElements()
+        );
+    }
+
     @Transactional
     @Override
     public OfferDto updateOffer(Long id, NewOfferDto dto) {
         Offer offer = offerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Offer with this ID doesn't exist in DB"));
+        if (dto.getImageTmpKey() != null) {
+            imageService.updateImage(dto.getImageTmpKey(), offer::setImage, offer::getImage);
+        }
         modelMapper.map(dto,offer);
+        offerRepository.save(offer);
         return modelMapper.map(offer, OfferDto.class);
     }
 
@@ -76,6 +100,9 @@ public class OfferServiceImpl implements OfferService{
     @Override
     public boolean deleteOffer(Long id) {
         Offer offer = offerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Offer with this ID doesn't exist in DB"));
+        if (offer.getImage() != null) {
+            imageService.deleteFile(offer.getImage());
+        }
         offerRepository.delete(offer);
         return true;
     }

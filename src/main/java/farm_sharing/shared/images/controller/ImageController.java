@@ -3,8 +3,10 @@ package farm_sharing.shared.images.controller;
 import farm_sharing.shared.images.dto.S3UploadDto;
 import farm_sharing.shared.images.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
