@@ -5,34 +5,26 @@ import lombok.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Setter
+    @Setter(AccessLevel.NONE)
+    private Long id;
     @Column(unique = true, nullable = false)
-    String nickname;
-    @Setter
-    Float rating;
-    @Setter
+    private String nickname;
+    private Float rating;
     @Column(unique = true)
-    String phoneNumber;
-    @Setter
-    String city;
-    @Setter
-    String address;
-    @Setter
+    private String phoneNumber;
+    private String city;
+    private String address;
     @Column(unique = true, nullable = false)
-    String email;
-    @Setter
+    private String email;
     @Column(nullable = false)
-    String password;
-    @Setter
-    Role role;
-    @Setter
-    String avatar;
+    private String password;
+    private Role role;
+    private String avatar;
 }

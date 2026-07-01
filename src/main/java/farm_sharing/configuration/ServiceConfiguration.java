@@ -1,5 +1,6 @@
 package farm_sharing.configuration;
 
+import farm_sharing.cart.dto.OfferInCartDto;
 import farm_sharing.offer.dto.OfferDto;
 import farm_sharing.offer.model.Offer;
 import farm_sharing.shared.images.service.ImageService;
@@ -45,7 +46,12 @@ public class ServiceConfiguration {
                                             : imageService.toPublicUrl(key);
                                 })
                                 .map(Offer::getImage, OfferDto::setImage)
-                );
+                )
+                .addMappings(mapper ->
+                        mapper.map(Offer::getAvailableAmount, OfferDto::setAmount));
+        modelMapper.typeMap(Offer.class, OfferInCartDto.class)
+                .addMappings(mapper ->
+                        mapper.map(Offer::getAvailableAmount, OfferInCartDto::setAmount));
         return modelMapper;
     }
 }

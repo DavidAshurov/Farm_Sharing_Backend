@@ -30,6 +30,7 @@ public class OfferServiceImpl implements OfferService{
     public boolean createOffer(NewOfferDto dto, String farmNickname) {
         Offer offer = modelMapper.map(dto, Offer.class);
         offer.setFarm(userRepository.findByNickname(farmNickname).get());
+        offer.setTotalAmount(dto.getAmount());
         if (dto.getImageTmpKey() != null && !dto.getImageTmpKey().isEmpty()) {
             offer.setImage(imageService.moveFromTmpToPersistent(dto.getImageTmpKey()));
         } else {

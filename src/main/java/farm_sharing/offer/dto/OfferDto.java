@@ -10,6 +10,7 @@ public class OfferDto {
     String category;
     String title;
     String description;
+    @Setter
     Integer amount;
     Double price;
     String units;

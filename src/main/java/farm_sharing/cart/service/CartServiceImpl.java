@@ -31,27 +31,20 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public boolean addItemToCart(String nickname, NewCartItemDto dto) throws BadRequestException {
         Cart cart = cartRepository.findByClient_Nickname(nickname).orElseGet(() ->
-                Cart.builder()
-                        .client(userRepository.findByNickname(nickname).get())
-                        .build());
+                new Cart(userRepository.findByNickname(nickname).get()));
         Offer offer = offerRepository.findById(dto.getOfferId()).orElseThrow(() -> new EntityNotFoundException("Offer with this ID doesn't exist in DB"));
         Optional<CartItem> existingItem = cart.getItems().stream()
                 .filter(i -> i.getOffer().getId().equals(offer.getId()))
                 .findFirst();
         if (existingItem.isPresent()) {
             int newQuantity = dto.getQuantity() + existingItem.get().getQuantity();
-            if (newQuantity <= offer.getAmount()) {
-                existingItem.get().setQuantity(newQuantity);
+            if (newQuantity <= offer.getTotalAmount()) {
+                existingItem.get().changeQuantity(newQuantity);
             } else {
                 throw new BadRequestException("You want to add to cart more products than available");
             }
         } else {
-            cart.getItems().add(CartItem.builder()
-                    .cart(cart)
-                    .offer(offer)
-                    .quantity(dto.getQuantity())
-                    .build()
-            );
+            cart.getItems().add(new CartItem(cart, offer, dto.getQuantity()));
         }
         cartRepository.save(cart);
         return true;
@@ -89,10 +82,10 @@ public class CartServiceImpl implements CartService {
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst();
         if (item.isPresent()) {
-            if (item.get().getOffer().getAmount() < dto.getQuantity()) {
+            if (item.get().getOffer().getTotalAmount() < dto.getQuantity()) {
                 throw new BadRequestException("You want to add to cart more products than available");
             }
-            item.get().setQuantity(dto.getQuantity());
+            item.get().changeQuantity(dto.getQuantity());
             cartRepository.save(cart);
             return true;
         } else {

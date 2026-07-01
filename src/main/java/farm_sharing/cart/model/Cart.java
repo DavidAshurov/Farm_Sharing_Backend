@@ -10,20 +10,24 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Builder
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Setter
-    @OneToOne
-    User client;
+    @OneToOne(fetch = FetchType.LAZY)
+    private User client;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Setter
-    @Builder.Default
-    List<CartItem> items = new ArrayList<>();
+    private final List<CartItem> items = new ArrayList<>();
+
+    public Cart(User client) {
+        this.client = client;
+    }
+
+    public void removeItem(CartItem item) {
+        items.remove(item);
+    }
 }
 
 
