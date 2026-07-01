@@ -5,29 +5,34 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode(of = "id")
 @Entity
 public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Setter
-    String category;
-    @Setter
-    String title;
-    @Setter
-    String description;
-    @Setter
-    Integer amount;
-    @Setter
-    Double price;
-    @Setter
-    String units;
-    @Setter
-    String image;
-    @Setter
-    @ManyToOne
-    User farm;
+    @Setter(AccessLevel.NONE)
+    private Long id;
+    private String category;
+    private String title;
+    private String description;
+    private int totalAmount;
+    private int reservedAmount;
+    private Double price;
+    private String units;
+    private String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User farm;
+
+    public Integer getAvailableAmount() {
+        return totalAmount - reservedAmount;
+    }
+
+    public void makeReservation(int amountToReserve) {
+        if (amountToReserve > getAvailableAmount()) {
+            return;
+        }
+        reservedAmount += amountToReserve;
+    }
 }

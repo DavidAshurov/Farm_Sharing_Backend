@@ -5,21 +5,31 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "id")
-@Builder
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @ManyToOne
+    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
-    Cart cart;
-    @ManyToOne
+    private Cart cart;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "offer_id", nullable = false)
-    Offer offer;
-    @Setter
-    Integer quantity;
+    private Offer offer;
+    private Integer quantity;
+
+    public CartItem(Cart cart, Offer offer, Integer quantity) {
+        this.cart = cart;
+        this.offer = offer;
+        this.quantity = quantity;
+    }
+
+    public void changeQuantity(int quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("Quantity must be positive");
+        }
+        this.quantity = quantity;
+    }
 }

@@ -39,23 +39,22 @@ public class SecurityConfiguration {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/offers").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/offers/min-max-price").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/offers").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/offers/min-max-price").permitAll()
                         .requestMatchers("/cart/**").hasRole(Role.CLIENT.name())
-                        .requestMatchers(HttpMethod.DELETE,"/user/{nickname}")
+                        .requestMatchers(HttpMethod.DELETE, "/user/{nickname}")
                             .access(new WebExpressionAuthorizationManager("authentication.name == #nickname || hasRole('ADMINISTRATOR')"))
-                        .requestMatchers("/user/new-admin")
-                            .hasRole(Role.ADMINISTRATOR.name())
-                        .requestMatchers("/offers/my")
-                            .hasRole(Role.FARM.name())
-                        .requestMatchers(HttpMethod.PUT,"/offers/{id}")
-                            .access((auth,context) -> new AuthorizationDecision(webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")),auth.get().getName())))
-                        .requestMatchers(HttpMethod.DELETE,"/offers/{id}")
-                            .access((auth,context) -> {
-                                boolean checkOfferOwner = webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")),auth.get().getName());
+                        .requestMatchers("/user/new-admin").hasRole(Role.ADMINISTRATOR.name())
+                        .requestMatchers("/offers/my").hasRole(Role.FARM.name())
+                        .requestMatchers(HttpMethod.PUT, "/offers/{id}")
+                            .access((auth, context) -> new AuthorizationDecision(webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")), auth.get().getName())))
+                        .requestMatchers(HttpMethod.DELETE, "/offers/{id}")
+                            .access((auth, context) -> {
+                                boolean checkOfferOwner = webSecurity.checkOfferOwner(Long.valueOf(context.getVariables().get("id")), auth.get().getName());
                                 boolean checkAdmin = context.getRequest().isUserInRole(Role.ADMINISTRATOR.name());
                                 return new AuthorizationDecision(checkOfferOwner || checkAdmin);
                             })
+                        .requestMatchers("/reservation").hasRole(Role.CLIENT.name())
                         .anyRequest().authenticated()
                 );
         return http.build();
